@@ -1,5 +1,6 @@
 from flask import Flask,render_template,jsonify,request,g
 import pyodbc
+import pandas
 app = Flask(__name__)
 
 ############################################################################################################
@@ -57,7 +58,17 @@ def getQuery():
   var_name = request.args.get('name')
   var_age = request.args.get('age')
   return 'The user {} has age {}'.format(var_name,var_age)
-  
+
+#get data from Azure SQL to Pandas > return value to web page
+@app.route('/querypd')
+def queryPandas():
+  cnxn = get_db()
+  sql = 'select * from asensor'
+  data = pandas.read_sql(sql,cnxn)
+  print(data)
+  print(data.iloc[0,0])
+  return 'Value from Dataframe: {}'.format(data.iloc[0,0])
+
 #return as json
 @app.route('/json')
 def getJSON():
