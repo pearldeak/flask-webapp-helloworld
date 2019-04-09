@@ -1,11 +1,29 @@
-from flask import Flask,render_template,jsonify,request
+from flask import Flask,render_template,jsonify,request,g
 import pyodbc
 app = Flask(__name__)
 
-#database connection credentials
+############################################################################################################
+####################################### Database connection ################################################
+############################################################################################################
+
 connstring = 'Driver={ODBC Driver 13 for SQL Server};Server=tcp:dnadbserver.database.windows.net,1433;Database=dnadb;Uid=dnaadmin@dnadbserver;Pwd=Insee555;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 cnxn = pyodbc.connect(connstring)
 cursor = cnxn.cursor()
+
+def get_db():
+    if 'db' not in g:
+        g.db = pyodbc.connect(connstring)
+    return g.db
+
+@app.teardown_appcontext
+def teardown_db(error):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
+
+############################################################################################################
+####################################### Web app route ######################################################
+############################################################################################################
 
 #most simple return
 @app.route('/')
@@ -49,14 +67,16 @@ def getJSON():
             }
   return jsonify(a_dict)
 
-#connect database
+#test database
 @app.route('/db')
-def getDB():
+def dbtest():
+  db = get_db()
   sql = 'select count(recdate) from asensor'
-  cursor.execute(sql)
-  for row in cursor.fetchall():
-    print(row)
-  return 'Data from database:{}'.format(row[0])
+  cur = db.execute(sql)
+  rows = cur.fetchall()
+  print(type(rows))
+  # return render_template('show_entries.html',entries=rows)
+  return 'fetchall type: {}, --- fetchall first item: {}, --- fetch all first of first: {}'.format(type(rows).__name__,rows[0],rows[0][0])
 
 #read JSON input from POST request and return something
 '''
@@ -112,6 +132,8 @@ def extractJSON(strKey,json_input):
   return varout
 
 
-########## START THE APP ABOVE ################
+############################################################################################################
+####################################### Start FLASK app ####################################################
+############################################################################################################
 if __name__ == '__main__':
   app.run()
