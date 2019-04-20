@@ -1,13 +1,13 @@
 from flask import Flask,render_template,jsonify,request,g
 import pyodbc
-import pandas
+import pandas as pd
 app = Flask(__name__)
 
 ############################################################################################################
 ####################################### Database connection ################################################
 ############################################################################################################
 
-connstring = 'Driver={ODBC Driver 13 for SQL Server};Server=tcp:dnadbserver.database.windows.net,1433;Database=dnadb;Uid=dnaadmin@dnadbserver;Pwd=Insee555;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
+connstring = 'secret'
 cnxn = pyodbc.connect(connstring)
 cursor = cnxn.cursor()
 
