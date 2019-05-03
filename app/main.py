@@ -112,7 +112,7 @@ def dbtest():
 - Send request to get example response
   - With POSTMAN: Select Body > Input the dictionary block above > Select method JSON(application/json) > Press SEND
   - With CURL command line: curl -X POST -H 'Content-Type: application/json' http://127.0.0.1:5000/api/echo-json -d '{"name": "Alice"}'
-
+  - Example for windows: `curl -X POST -H "Content-Type: application/json" -d "{\"customername\" : \"CHOR.KARNCHANG PCL.\", \"distr_chn\" : \"Owner\", \"approvalzone\" : \"BKK-East\", \"customerid\" : \"110000007\", \"materials\" : [{ \"index\":1, \"mat_id\": \"840710023600\", \"newpricelist\":2500, \"expected_vol\": 1000},{ \"index\":2, \"mat_id\": \"840710026100\", \"newpricelist\":2300, \"expected_vol\": 100}]}" https://rmxcalc04.azurewebsites.net/test`
 ref: https://raw.githubusercontent.com/noppGithub/img/master/flask/json_request.PNG
 '''
 @app.route('/jsonquery', methods=['POST']) #GET requests will be blocked
