@@ -168,6 +168,13 @@ def upload_file():
 def export_records():
     # TODO[2019-05-02 15:07]: add code to output excel file for user downloading
     return 
+
+@app.route('/mywebform')
+def render_form():
+    dropdown_list = ['Air', 'Land', 'Sea']
+    another_list = [1,2,3]
+    return render_template('myform.html', dropdown_list=dropdown_list,zzz=another_list)
+
 ############################################################################################################
 ####################################### Start FLASK app ####################################################
 ############################################################################################################
